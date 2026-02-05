@@ -17,7 +17,8 @@ async function renderImage(req) {
     const height = req.query.deck_image_height ? parseInt(req.query.deck_image_height) : 480;
 
     //Prepare portrait and text
-    const messageText = villager ? `Happy Birthday, ${villager.name}` : `It is currently ${getDate()}. Have a nice day everyone!`;
+    const dateText = `It is currently ${getDate()}.`
+    const messageText = villager ? `Happy Birthday, ${villager.name}!` : `Have a nice day everyone!`;
     const portraitUrl = villager ? villager.photoImage : './resources/default.png';
     const backgroundImage = './resources/background.png'
 
@@ -37,15 +38,16 @@ async function renderImage(req) {
     // Draw portrait
     const portrait = await canvas.loadImage(portraitUrl);
     const portraitWidth = width / 3.5;
-    const portraitHeight = height / 2;
+    const portraitHeight = height / 1.5;
     const portraitX = 20;
-    const portraitY = height / 4;
+    const portraitY = height / 5;
 
     ctx.drawImage(portrait, portraitX, portraitY, portraitWidth, portraitHeight);
 
     ctx.fillStyle = "#000000";
-    ctx.font = "20pt AppFont";
-    ctx.fillText(messageText, width / 3.5 + 40, height / 2);
+    ctx.font = "50pt AppFont";
+    ctx.fillText(dateText, width / 3.5 + 40, height / 2 - 30);
+    ctx.fillText(messageText, width / 3.5 + 40, height / 2 + 50);
 
     const out = fs.createWriteStream('./out.png')
     const stream = img.createPNGStream()
