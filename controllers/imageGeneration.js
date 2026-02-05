@@ -12,12 +12,9 @@ async function renderImage(req) {
     //Check if a villager has a birthday
     const villager = villagers.find(({ birthday }) => birthday === getDate());
     
-    console.log(req.query.deck_image_width);
-    console.log(req.query.deck_image_height);
-    
     //Check if image height and width are specified
-    const width = req.query.deck_image_width ? parseInt(req.query.width) : 1280;
-    const height = req.query.deck_image_height ? parseInt(req.query.height) : 480;
+    const width = req.query.deck_image_width ? parseInt(req.query.deck_image_width) : 1280;
+    const height = req.query.deck_image_height ? parseInt(req.query.deck_image_height) : 480;
 
     //Prepare portrait and text
     const messageText = villager ? `Happy Birthday, ${villager.name}` : `It is currently ${getDate()}. Have a nice day everyone!`;
