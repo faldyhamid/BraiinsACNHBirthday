@@ -13,8 +13,8 @@ async function renderImage(req) {
     const villager = villagers.find(({ birthday }) => birthday === getDate());
 
     //Check if image height and width are specified
-    const width = req.query.width ? parseInt(req.query.width) : 800;
-    const height = req.query.height ? parseInt(req.query.height) : 600;
+    const width = req.query.deck_image_width ? parseInt(req.query.width) : 1280;
+    const height = req.query.deck_image_height ? parseInt(req.query.height) : 480;
 
     //Prepare portrait and text
     const messageText = villager ? `Happy Birthday, ${villager.name}` : `It is currently ${getDate()}. Have a nice day everyone!`;
