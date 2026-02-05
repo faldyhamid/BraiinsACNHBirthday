@@ -11,7 +11,10 @@ const villagers = await jsonfile.readFile(file);
 async function renderImage(req) {
     //Check if a villager has a birthday
     const villager = villagers.find(({ birthday }) => birthday === getDate());
-
+    
+    console.log(req.query.deck_image_width);
+    console.log(req.query.deck_image_height);
+    
     //Check if image height and width are specified
     const width = req.query.deck_image_width ? parseInt(req.query.width) : 1280;
     const height = req.query.deck_image_height ? parseInt(req.query.height) : 480;

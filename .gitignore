@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 
 # Mac OS specific files
 .DS_store
+
+# Output file
+out.png
