@@ -52,7 +52,11 @@ async function renderImage(req) {
     const out = fs.createWriteStream('./out.png')
     const stream = img.createPNGStream()
     stream.pipe(out)
-    out.on('finish', () => console.log("Image created!"));
+    out.on('finish', () => {
+        console.log("Image created!")
+        out.end();
+        stream.destroy()
+    });
 };
 
 
