@@ -4,11 +4,11 @@ import * as path from 'path';
 import * as fs from 'fs';
 import getDate from '../utils/getDate.js';
 
-async function renderImage(req) {
-    //Prepare villagers data
-    const file = './resources/Villagers.json'
-    const villagers = await jsonfile.readFile(file);
+//Prepare villagers data
+const file = './resources/Villagers.json'
+const villagers = await jsonfile.readFile(file);
 
+async function renderImage(req) {
     //Check if a villager has a birthday
     const villager = villagers.find(({ birthday }) => birthday === getDate());
 
@@ -53,9 +53,9 @@ async function renderImage(req) {
     const stream = img.createPNGStream()
     stream.pipe(out)
     out.on('finish', () => {
-        console.log("Image created!")
+        console.log("Image created!");
         out.end();
-        stream.destroy()
+        stream.destroy();
     });
 };
 
