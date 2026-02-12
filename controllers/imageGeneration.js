@@ -3,7 +3,6 @@ import * as jsonfile from "jsonfile";
 import * as path from 'path';
 import * as fs from 'fs';
 import getDate from '../utils/getDate.js';
-import { valentineDay } from './easterEgg.js';
 
 //Prepare villagers data
 const file = './resources/Villagers.json'
@@ -36,26 +35,19 @@ async function renderImage(req) {
     const background = await canvas.loadImage(backgroundImage)
     ctx.drawImage(background, 0, 0);
 
+    // Draw portrait
+    const portrait = await canvas.loadImage(portraitUrl);
+    const portraitWidth = width / 3.5;
+    const portraitHeight = height / 1.5;
+    const portraitX = 20;
+    const portraitY = height / 5;
 
-    //If specific date, do easter egg
-    if (getDate() === '02/14') {
-        valentineDay(ctx, width, height);
-    }
-    else {
-        // Draw portrait
-        const portrait = await canvas.loadImage(portraitUrl);
-        const portraitWidth = width / 3.5;
-        const portraitHeight = height / 1.5;
-        const portraitX = 20;
-        const portraitY = height / 5;
+    ctx.drawImage(portrait, portraitX, portraitY, portraitWidth, portraitHeight);
 
-        ctx.drawImage(portrait, portraitX, portraitY, portraitWidth, portraitHeight);
-
-        ctx.fillStyle = "#000000";
-        ctx.font = "50pt AppFont";
-        ctx.fillText(dateText, width / 3.5 + 40, height / 2 - 30);
-        ctx.fillText(messageText, width / 3.5 + 40, height / 2 + 50);
-    }
+    ctx.fillStyle = "#000000";
+    ctx.font = "50pt AppFont";
+    ctx.fillText(dateText, width / 3.5 + 40, height / 2 - 30);
+    ctx.fillText(messageText, width / 3.5 + 40, height / 2 + 50);
 
     const out = fs.createWriteStream('./out.png')
     const stream = img.createPNGStream()
