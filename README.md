@@ -6,6 +6,7 @@ Setup:
 1. Request an API key for Nookipedia at api.nookipedia.com
 2. Add API key to .env as "API_KEY"
 3. Run
+4. Use the route /getImage in Braiins Deck's image widget
 
 Routes:
 - '/' - GET : Returns a simple message that the app is running
