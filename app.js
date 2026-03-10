@@ -13,6 +13,11 @@ app.get('/', (req, res) => {
 app.get('/getImage', sendImage);
 
 app.listen(port, () => {
-  loadEnvFile();
+  try{
+    loadEnvFile()
+  } catch (e) {
+    console.error(e)
+  }
+
   console.log(`Now listening on ${port}`);
 })

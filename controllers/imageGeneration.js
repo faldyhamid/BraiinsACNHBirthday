@@ -29,11 +29,10 @@ async function fetchVillager() {
 async function renderImage(req) {
     //Check if a villager has a birthday
     const villager = await fetchVillager();
-    console.log(villager);
 
     //Check if image height and width are specified
-    const width = req.query.deck_image_width ? parseInt(req.query.deck_image_width) : 1280;
-    const height = req.query.deck_image_height ? parseInt(req.query.deck_image_height) : 480;
+    const width = req.query.width ? parseInt(req.query.width) : 1280;
+    const height = req.query.width ? parseInt(req.query.width) : 480;
 
     //Prepare portrait and text
     const dateText = `It is currently ${getDate()}.`
