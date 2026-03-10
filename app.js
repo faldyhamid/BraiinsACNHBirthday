@@ -1,4 +1,6 @@
 import express from 'express';
+import { loadEnvFile } from 'node:process';
+
 const app = express()
 const port = 3000
 
@@ -11,5 +13,6 @@ app.get('/', (req, res) => {
 app.get('/getImage', sendImage);
 
 app.listen(port, () => {
+  loadEnvFile();
   console.log(`Now listening on ${port}`);
 })

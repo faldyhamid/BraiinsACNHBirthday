@@ -4,13 +4,32 @@ import * as path from 'path';
 import * as fs from 'fs';
 import getDate from '../utils/getDate.js';
 
-//Prepare villagers data
-const file = './resources/Villagers.json'
-const villagers = await jsonfile.readFile(file);
+// //Prepare villagers data
+// const file = './resources/Villagers.json'
+// const villagers = await jsonfile.readFile(file);
+
+async function fetchVillager() {
+    //Get current month and date
+    const currentDate = new Date;
+    const month = currentDate.getMonth() + 1;
+    const day = currentDate.getDate();
+
+    //Fetch from API by date
+    const response = await fetch(`https://api.nookipedia.com/villagers?birthmonth=${month}&birthday=${day}`, {
+        headers: {
+            'X-API-KEY': process.env.API_KEY,
+            'Accept-Version': '1.7.0'
+        }
+    })
+    
+    const result = await response.json();
+    return result[0];
+}
 
 async function renderImage(req) {
     //Check if a villager has a birthday
-    const villager = villagers.find(({ birthday }) => birthday === getDate());
+    const villager = await fetchVillager();
+    console.log(villager);
 
     //Check if image height and width are specified
     const width = req.query.deck_image_width ? parseInt(req.query.deck_image_width) : 1280;
@@ -19,7 +38,7 @@ async function renderImage(req) {
     //Prepare portrait and text
     const dateText = `It is currently ${getDate()}.`
     const messageText = villager ? `Happy Birthday, ${villager.name}!` : `Have a nice day everyone!`;
-    const portraitUrl = villager ? villager.photoImage : './resources/default.png';
+    const portraitUrl = villager ? villager.image_url : './resources/default.png';
     const backgroundImage = './resources/background.png'
 
     //Create canvas and context
