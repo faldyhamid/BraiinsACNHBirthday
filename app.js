@@ -17,6 +17,7 @@ app.listen(port, () => {
     loadEnvFile()
   } catch (e) {
     console.error(e)
+    console.log('.env file not found');
   }
 
   console.log(`Now listening on ${port}`);

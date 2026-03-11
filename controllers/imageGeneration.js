@@ -1,12 +1,7 @@
 import * as canvas from 'canvas';
-import * as jsonfile from "jsonfile";
 import * as path from 'path';
 import * as fs from 'fs';
 import getDate from '../utils/getDate.js';
-
-// //Prepare villagers data
-// const file = './resources/Villagers.json'
-// const villagers = await jsonfile.readFile(file);
 
 async function fetchVillager() {
     //Get current month and date
@@ -32,10 +27,10 @@ async function renderImage(req) {
 
     //Check if image height and width are specified
     const width = req.query.width ? parseInt(req.query.width) : 1280;
-    const height = req.query.width ? parseInt(req.query.width) : 480;
+    const height = req.query.height ? parseInt(req.query.height) : 480;
 
     //Prepare portrait and text
-    const dateText = `It is currently ${getDate()}.`
+    const dateText = `It's ${getDate()}.`
     const messageText = villager ? `Happy Birthday, ${villager.name}!` : `Have a nice day everyone!`;
     const portraitUrl = villager ? villager.image_url : './resources/default.png';
     const backgroundImage = './resources/background.png'
@@ -55,10 +50,10 @@ async function renderImage(req) {
 
     // Draw portrait
     const portrait = await canvas.loadImage(portraitUrl);
-    const portraitWidth = width / 3.5;
-    const portraitHeight = height / 1.5;
-    const portraitX = 20;
-    const portraitY = height / 5;
+    const portraitHeight = height / 1.2;
+    const portraitWidth = portraitHeight * 0.49;
+    const portraitX = width / 10;
+    const portraitY =  height / 9.6;
 
     ctx.drawImage(portrait, portraitX, portraitY, portraitWidth, portraitHeight);
 
