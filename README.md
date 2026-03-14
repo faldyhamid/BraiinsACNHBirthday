@@ -1,4 +1,6 @@
 # BraiinsACNHBirthday
+# OLD VERSION WHICH WORKS FROM A LOCAL JSON FILE BEFORE MOVING TO NOOKIPEDIA API
+
 A simple Express API which generates an image to display on a Braiins Deck if an Animal Crossing villager has a birthday today.
 
 The required files are stored in resources:
