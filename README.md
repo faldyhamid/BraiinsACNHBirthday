@@ -1,9 +1,9 @@
 # BraiinsACNHBirthday
 
-A simple Express API which generates an image to display on a Braiins Deck if an Animal Crossing villager has a birthday today. This version uses the Nookipedia API to fetch latest villager data.
+A simple Express API which generates an image to display on a Braiins Deck if an Animal Crossing villager has a birthday today. Uses the Nookipedia API to fetch villager data and images.
 
 Setup:
-1. Request an API key for Nookipedia at api.nookipedia.com
+1. Request an API key from Nookipedia at api.nookipedia.com
 2. Add API key to .env as "API_KEY"
 3. Run
 4. Use the route /getImage in Braiins Deck's image widget - Ex: 'https://examplelink/getImage?height={{height}}&width={{width}}'
