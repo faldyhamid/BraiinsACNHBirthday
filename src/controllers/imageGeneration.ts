@@ -25,7 +25,6 @@ async function fetchVillager(): Promise<Villager | null> {
         const response = await fetch(url, httpOptions)
 
         const result = await response.json();
-        console.log(result);
         return result[0];
     } catch (error) {
         console.log(error);
