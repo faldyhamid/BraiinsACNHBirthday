@@ -1,8 +1,8 @@
 import express from 'express';
 import { loadEnvFile } from 'node:process';
 
-const app = express()
-const port = 3000
+const app = express();
+const port = 3000;
 
 import { sendImage } from './controllers/imageGeneration.js';
 

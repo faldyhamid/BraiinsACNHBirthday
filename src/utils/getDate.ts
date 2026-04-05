@@ -1,4 +1,4 @@
-export default func => {
+export function getDate (): string {
     const date = new Date();
 
     const formatted = new Intl.DateTimeFormat('en-US', {

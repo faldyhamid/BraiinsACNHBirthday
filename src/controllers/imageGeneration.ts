@@ -1,9 +1,11 @@
 import * as canvas from 'canvas';
 import * as path from 'path';
 import * as fs from 'fs';
-import getDate from '../utils/getDate.js';
+import { getDate } from '../utils/getDate.js';
+import type { Villager } from "../types/villager.js";
+import type { Request, Response } from 'express';
 
-async function fetchVillager() {
+async function fetchVillager(): Promise<Villager | null> {
     //Get current month and date
     const currentDate = new Date;
     const month = currentDate.getMonth() + 1;
@@ -11,14 +13,19 @@ async function fetchVillager() {
 
     //Fetch from API by date
     try {
-        const response = await fetch(`https://api.nookipedia.com/villagers?birthmonth=${month}&birthday=${day}&game=nh&nhdetails=true`, {
+        const url: string = `https://api.nookipedia.com/villagers?birthmonth=${month}&birthday=${day}&game=nh&nhdetails=true`;
+
+        const httpOptions: Object = {
             headers: {
                 'X-API-KEY': process.env.API_KEY,
                 'Accept-Version': '1.7.0'
             }
-        })
+        }
+
+        const response = await fetch(url, httpOptions)
 
         const result = await response.json();
+        console.log(result);
         return result[0];
     } catch (error) {
         console.log(error);
@@ -26,15 +33,15 @@ async function fetchVillager() {
     }
 }
 
-async function renderImage(height, width) {
+async function renderImage(height: number, width: number): Promise<canvas.PNGStream> {
     //Check if a villager has a birthday
-    const villager = await fetchVillager();
+    const villager: Villager | null = await fetchVillager();
 
     //Prepare portrait and text
-    const dateText = `It's ${getDate()}.`;
-    const messageText = villager ? `Happy Birthday, ${villager.name}!` : `Have a nice day everyone!`;
-    const portraitUrl = villager ? villager.nh_details.image_url : './resources/default.png';
-    const backgroundImage = './resources/background.png';
+    const dateText: string = `It's ${getDate()}.`;
+    const messageText: string = villager ? `Happy Birthday, ${villager.name}!` : `Have a nice day everyone!`;
+    const portraitUrl: string = villager ? villager.nh_details!.image_url : './resources/default.png';
+    const backgroundImage: string = './resources/background.png';
 
     //Create canvas and context
     const img = canvas.createCanvas(width, height);
@@ -46,7 +53,7 @@ async function renderImage(height, width) {
     );
 
     //Draw background
-    const background = await canvas.loadImage(backgroundImage)
+    const background: canvas.Image = await canvas.loadImage(backgroundImage)
     ctx.drawImage(background, 0, 0);
 
     // Draw portrait
@@ -68,7 +75,7 @@ async function renderImage(height, width) {
 };
 
 
-async function sendImage(req, res) {
+async function sendImage(req: Request, res: Response) {
     const options = {
         root: path.join('./'),
         headers: {
@@ -77,13 +84,13 @@ async function sendImage(req, res) {
     };
 
     //Check if image height and width are specified. Defaults to Braiins Deck full screen resolution
-    const width = req.query.width ? parseInt(req.query.width) : 1280;
-    const height = req.query.height ? parseInt(req.query.height) : 480;
+    const width: number = req.query.width ? parseInt(req.query.width as string) : 1280;
+    const height: number = req.query.height ? parseInt(req.query.height as string) : 480;
 
-    const fileName = `${height}x${width}.png`;
+    const fileName: string = `${height}x${width}.png`;
 
-    const out = fs.createWriteStream(fileName);
-    const stream = await renderImage(height, width);
+    const out: fs.WriteStream = fs.createWriteStream(fileName);
+    const stream: canvas.PNGStream = await renderImage(height, width);
     stream.pipe(out);
 
     out.on('finish', () => {
@@ -94,10 +101,10 @@ async function sendImage(req, res) {
         res.status(200).sendFile(fileName, options)
     })
 
-    out.on('error', (e) => {
+    out.on('error', (e) => {        
         out.end();
         stream.destroy();
-        
+
         console.log(e);
         res.status(500).send('Failed to create image!');
     })
