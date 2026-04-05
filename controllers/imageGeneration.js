@@ -19,7 +19,6 @@ async function fetchVillager() {
         })
 
         const result = await response.json();
-        console.log(result[0]);
         return result[0];
     } catch (error) {
         console.log(error);
@@ -81,7 +80,7 @@ async function sendImage(req, res) {
     const width = req.query.width ? parseInt(req.query.width) : 1280;
     const height = req.query.height ? parseInt(req.query.height) : 480;
 
-    const fileName = `${height}x${width}`;
+    const fileName = `${height}x${width}.png`;
 
     const out = fs.createWriteStream(fileName);
     const stream = await renderImage(height, width);
@@ -96,6 +95,9 @@ async function sendImage(req, res) {
     })
 
     out.on('error', (e) => {
+        out.end();
+        stream.destroy();
+        
         console.log(e);
         res.status(500).send('Failed to create image!');
     })
