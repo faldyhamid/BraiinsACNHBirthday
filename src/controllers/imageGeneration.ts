@@ -39,7 +39,7 @@ async function renderImage(height: number, width: number): Promise<canvas.PNGStr
     //Prepare portrait and text
     const dateText: string = `It's ${getDate()}.`;
     const messageText: string = villager ? `Happy Birthday, ${villager.name}!` : `Have a nice day everyone!`;
-    const portraitUrl: string = villager ? villager.nh_details!.image_url : './resources/default.png';
+    const portraitUrl: string = villager && villager.nh_details?.image_url ? villager.nh_details.image_url : './resources/default.png';
     const backgroundImage: string = './resources/background.png';
 
     //Create canvas and context
@@ -55,20 +55,29 @@ async function renderImage(height: number, width: number): Promise<canvas.PNGStr
     const background: canvas.Image = await canvas.loadImage(backgroundImage)
     ctx.drawImage(background, 0, 0);
 
-    // Draw portrait
-    const portrait = await canvas.loadImage(portraitUrl);
-    const portraitHeight = height / 1.2;
-    const portraitWidth = portraitHeight * 0.49;
-    const portraitX = width / 10;
-    const portraitY = height / 9.6;
+    // Fetch portrait
+    const portrait: canvas.Image = await canvas.loadImage(portraitUrl);
+
+    //Max Width for Portrait to calculate scaling
+    const maxWidth = width * 0.2857;
+    const maxHeight = height - height * 0.1;
+    const widthRatio = maxWidth / portrait.width;
+    const heightRatio = maxHeight / portrait.height;
+    const bestRatio = Math.min(widthRatio, heightRatio);
+
+    // Calculate image size and placement
+    const portraitHeight = portrait.height * bestRatio;
+    const portraitWidth = portrait.width * bestRatio;
+    const portraitX = Math.max((width * 0.2857 - portraitWidth) * 0.5, 20);
+    const portraitY = height * 0.06667;
 
     ctx.drawImage(portrait, portraitX, portraitY, portraitWidth, portraitHeight);
 
     //Prepare and write text
     ctx.fillStyle = "#000000";
     ctx.font = "50pt AppFont";
-    ctx.fillText(dateText, width / 3.5 + 40, height / 2 - 30);
-    ctx.fillText(messageText, width / 3.5 + 40, height / 2 + 50);
+    ctx.fillText(dateText, width / 3.5 + 40, height * 0.5 - 30);
+    ctx.fillText(messageText, width / 3.5 + 40, height * 0.5 + 50);
 
     return img.createPNGStream();
 };
@@ -93,14 +102,14 @@ async function sendImage(req: Request, res: Response) {
     stream.pipe(out);
 
     out.on('finish', () => {
-        console.log("Image created!");
+        console.log(`Image created!`);
         out.end();
         stream.destroy();
 
         res.status(200).sendFile(fileName, options)
     })
 
-    out.on('error', (e) => {        
+    out.on('error', (e) => {
         out.end();
         stream.destroy();
 
