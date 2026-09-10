@@ -5,8 +5,9 @@ A simple Express API which generates an image to display on a Braiins Deck if an
 Setup:
 1. Request an API key from Nookipedia at api.nookipedia.com
 2. Add API key to .env as "API_KEY"
-3. Run
-4. Use the route /getImage in Braiins Deck's image widget - Ex: 'https://examplelink/getImage?height={{height}}&width={{width}}'
+3. Compile into JS - 'npm run build' or simply 'tsc'
+4. Run 'npm run start'
+5. Use the route /getImage in Braiins Deck's image widget - Ex: 'https://examplelink/getImage?height={{height}}&width={{width}}'
 
 Routes:
 1. '/' - GET : Returns a simple message that the app is running
